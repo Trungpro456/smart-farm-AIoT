@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMART FARM - Login</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background-image: url('{{ url_for("static", filename="background.jpg") }}');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .transparent-input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            transition: border-color 0.3s;
+        }
+
+        .transparent-input:focus {
+            outline: none;
+            border-bottom-color: white;
+        }
+
+        .eye-icon {
+            cursor: pointer;
+        }
+
+        .logo {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            margin: 0 auto 15px auto;
+            display: block;
+            box-shadow: 0 0 20px rgba(0, 255, 128, 0.5),
+                0 0 10px rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+
+<body class="text-white italic">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="form-container w-full max-w-md p-8 rounded-2xl space-y-6">
+
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="SMART FARM Logo" class="logo">
+
+            <h1 class="text-3xl font-bold text-center">SMART FARM</h1>
+            <h2 class="text-2xl text-center">Login</h2>
+
+            <form id="loginForm" class="space-y-6">
+                <div class="relative">
+                    <input id="username" name="username" type="text" placeholder="Username" required
+                        class="transparent-input w-full py-2 pr-10 pl-2 text-white text-lg">
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300">
+                        <i class="fas fa-user"></i>
+                    </span>
+                </div>
+
+                <div class="relative">
+                    <input id="password" name="password" type="password" placeholder="Password" required
+                        class="transparent-input w-full py-2 pr-10 pl-2 text-white text-lg">
+                    <span id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 eye-icon">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg shadow-lg transition">
+                    Login
+                </button>
+
+                <p id="errorMsg" class="text-center text-red-400 font-semibold mt-4 hidden"></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle ẩn/hiện mật khẩu
+        const passwordInput = document.getElementById("password");
+        const togglePassword = document.getElementById("togglePassword");
+        const eyeIcon = togglePassword.querySelector("i");
+        togglePassword.addEventListener("click", () => {
+            const isHidden = passwordInput.type === "password";
+            passwordInput.type = isHidden ? "text" : "password";
+            eyeIcon.classList.toggle("fa-eye");
+            eyeIcon.classList.toggle("fa-eye-slash");
+        });
+
+        // Gửi request login qua API
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorMsg = document.getElementById("errorMsg");
+
+            try {
+                const res = await fetch("/api/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    window.location.href = "/"; // ✅ Điều hướng về index
+                } else {
+                    errorMsg.textContent = data.message || "Sai tài khoản hoặc mật khẩu!";
+                    errorMsg.classList.remove("hidden");
+                }
+            } catch (err) {
+                errorMsg.textContent = "Lỗi kết nối tới server!";
+                errorMsg.classList.remove("hidden");
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử dữ liệu cảm biến</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/static/history.js" defer></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen p-6">
+
+    <div class="container mx-auto bg-white rounded-2xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-green-700">
+                🌾 Lịch sử dữ liệu cảm biến
+            </h1>
+
+            <a href="/"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300">
+                ⬅️ Về trang chính
+            </a>
+        </div>
+
+        <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="deviceSelect" class="block text-sm font-medium text-gray-700">Chọn vườn:</label>
+                <select id="deviceSelect" class="border rounded-lg p-2 mt-2 w-full">
+                    <option value="device1">Vườn 1</option>
+                    <option value="device2">Vườn 2</option>
+                    <option value="device3">Vườn 3</option>
+                    <option value="device4">Vườn 4</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="startDate" class="block text-sm font-medium text-gray-700">Từ ngày:</label>
+                <input type="date" id="startDate" class="border rounded-lg p-2 mt-2 w-full">
+            </div>
+
+            <div>
+                <label for="endDate" class="block text-sm font-medium text-gray-700">Đến ngày:</label>
+                <div class="flex gap-2 mt-2">
+                    <input type="date" id="endDate" class="border rounded-lg p-2 w-full">
+                    <button id="filterBtn"
+                        class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition duration-300">
+                        Lọc
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gray-50 p-4 rounded-xl shadow-inner">
+                <h2 class="text-center font-semibold text-gray-700 mb-2">🌡️ Biểu đồ nhiệt độ</h2>
+                <canvas id="tempChart" height="200"></canvas>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl shadow-inner">
+                <h2 class="text-center font-semibold text-gray-700 mb-2">💧 Biểu đồ độ ẩm</h2>
+                <canvas id="humiChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="mt-8 overflow-x-auto">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">📋 Bảng dữ liệu gần đây</h2>
+            <table class="w-full text-sm text-left text-gray-700 border">
+                <thead class="bg-green-600 text-white">
+                    <tr>
+                        <th class="px-4 py-2">Thời gian</th>
+                        <th class="px-4 py-2">Thiết bị</th>
+                        <th class="px-4 py-2">Nhiệt độ (°C)</th>
+                        <th class="px-4 py-2">Độ ẩm (%)</th>
+                        <th class="px-4 py-2">Cảm biến</th>
+                    </tr>
+                </thead>
+                <tbody id="dataTableBody" class="divide-y"></tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
